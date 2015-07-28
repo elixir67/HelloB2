@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns="http://www.blackboard.com/bb-manifest-plugin"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.blackboard.com/bb-manifest-plugin http://fibbba.medu.com/xsd/bb-manifest-plugin.xsd">
+  <plugin>
+    <name value="plugin.name"/>
+    <handle value="hello-world"/>
+    <description value="plugin.description"/>
+    <default-locale value="en_US"/>
+    <version value="@b2.version@"/>
+    <requires>
+      <bbversion value="9.1.201411"/>
+      <plugin-versions>
+        <plugin-version min="1.5" handle="rest" vendor="bb"/>
+      </plugin-versions>
+    </requires>
+
+    <vendor>
+      <id value="bb"/>
+      <name value="Dan Lin"/>
+      <description value="plugin.vendor.description"/>
+    </vendor>
+    
+	<application-defs>
+		<application handle="hello-world" type="system" name="hello-world">
+			<description lang="en_US">Try Dan's hello world!</description>
+			<links>
+
+				<link>
+					<type value="system_tool" />
+					<navhandle value="" />
+					<name value="hello.label" />
+					<handle value="hello" />
+					<url value="hello/hello.jsp" />
+					<description value="hello.description" />
+				</link>
+
+			</links>
+		</application>
+	</application-defs>
+ 
+     <permissions>
+      <permission type="persist" name="*" actions="create,modify,delete,persist"/>
+      <permission type="attribute" name="user.*" actions="get,set"/>
+      <permission type="java.util.PropertyPermission" name="*" actions="read,write"/>
+      <permission type="socket" name="*" actions="connect,listen,resolve,accept"/>
+      <permission type="java.io.FilePermission" name="&amp;lt;&amp;lt;ALL FILES&amp;gt;&amp;gt;" actions="read,write,delete,execute"/>
+      <permission type="java.lang.reflect.ReflectPermission" name="suppressAccessChecks"/>
+      <permission type="ognl.OgnlInvokePermission" name="*"/>
+      <permission type="java.lang.RuntimePermission" name="*"/>
+      <permission type="java.security.SecurityPermission" name="insertProvider.SUN"/>
+      <permission type="java.security.SecurityPermission" name="insertProvider.SunJSSE"/>
+    </permissions>
+
+  </plugin>
+</manifest>

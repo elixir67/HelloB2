@@ -1,0 +1,11 @@
+*-en_SA.properties
+*-en_SC.properties
+*-en_SM.properties
+.classpath
+.gradle
+.p4ignore
+.project
+.settings
+_eclipse_
+target
+*.iml

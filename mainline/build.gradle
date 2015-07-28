@@ -1,0 +1,86 @@
+apply plugin: "b2"
+
+// define the version for the project when publishing to maven
+group "blackboard.plugin"
+version "1.0-SNAPSHOT"
+learnRelease "9.1 201411"
+eclipseProjectName "plugins.dan-bb"
+
+b2version {
+  p4root "//B2/projects/dan-bb/mainline"
+}
+
+restAPI = true
+
+project.ext {
+  inputValidationVersion  = "9.6-SNAPSHOT"
+  blackboardCoreVersion   = "1.1-SNAPSHOT"
+  jerseyVersion           = "1.18.1"
+  powerMockVersion        = "1.5.2"
+  springVersion           = "3.2.8.RELEASE"
+  springWebapiVersion     = "10.5-SNAPSHOT"
+  restSpringWebapiVersion = "1.1-SNAPSHOT"
+  restApiVersion          = "1.4-SNAPSHOT"
+  restAssuredVersion      = "2.3.0"
+}
+
+List spring = [
+  "org.springframework:spring-aop:$springVersion",
+  "org.springframework:spring-beans:$springVersion",
+  "org.springframework:spring-context:$springVersion",
+  "org.springframework:spring-core:$springVersion",
+  "org.springframework:spring-expression:$springVersion",
+  "org.springframework:spring-web:$springVersion",
+  "org.springframework:spring-webmvc:$springVersion",
+  "org.springframework:spring-context-support:$ext.springVersion"
+]
+
+List jersey = [
+  "com.sun.jersey:jersey-client:$jerseyVersion",
+  "com.sun.jersey:jersey-core:$jerseyVersion",
+  "com.sun.jersey.contribs:jersey-multipart:$jerseyVersion",
+  "com.sun.jersey:jersey-json:$jerseyVersion"
+]
+
+// define the project's dependencies
+dependencies {
+  // providedCompile dependencies are libraries needed to build, but should not be included in the B2 WAR.
+  providedCompile elastic("blackboard.platform:bb-platform:$learnVersion"),
+                  elastic("blackboard.platform:bb-taglibs:$learnVersion"),
+                  elastic("blackboard.plugin:rest-api:$project.restApiVersion")
+
+  // compile dependencies are included in the build AND are included in the WEB-INF/lib directory for a B2
+  compile elastic("blackboard.platform:bb-common:$learnVersion"),
+          elastic("blackboard.platform:bb-ui-webapi:$learnVersion"),
+          elastic("blackboard.platform:bb-spring-webapi:$springWebapiVersion"),
+          elastic("blackboard.plugin:bb-rest-spring-webapi:$restSpringWebapiVersion"),
+          spring,
+          jersey
+
+  webResources elastic("blackboard.platform:bb-ui-webapi:$learnVersion:resources")
+
+  testRuntime elastic("blackboard.platform:bb-exec:$learnVersion")
+
+  testCompile elastic("blackboard.platform:bb-platform:$learnVersion:tests"),
+              elastic("blackboard.platform:bb-taglibs:$learnVersion:tests"),
+              elastic("blackboard.plugin:xss-input-validation-api:$inputValidationVersion:tests"),
+              elastic("blackboard.internal:test-support:1.0-SNAPSHOT"),
+              "org.mockito:mockito-all:1.9.5",
+              "org.powermock:powermock-api-mockito:$powerMockVersion",
+              "org.powermock:powermock-module-junit4:$powerMockVersion",
+              "org.springframework:spring-test:$springVersion",
+              "com.jayway.restassured:rest-assured:$restAssuredVersion",
+              "com.jayway.restassured:spring-mock-mvc:$restAssuredVersion",
+              "org.codehaus.groovy:groovy:2.2.1",
+              "antlr:antlr:2.7.7"
+
+  integTestRuntime elastic("blackboard.platform:learn-runtime:$learnVersion"),
+                   "jtidy:jtidy:8.0"
+
+  restDocSourceJars (elastic("blackboard.plugin:rest-api:$restApiVersion:sources")) {transitive = false}
+  restDocSourceJars (elastic("blackboard.plugin:bb-rest-spring-webapi:$restSpringWebapiVersion:sources")) {transitive = false}
+  restDocSourceJars (elastic("blackboard.platform:bb-platform:$learnVersion:sources")) {transitive = false}
+  restDocSourceJars (elastic("blackboard.platform:bb-taglibs:$learnVersion:sources")) {transitive = false}
+
+  jmeterFragment elastic("blackboard.plugin:blackboard-core:$blackboardCoreVersion:jmeter@jar")
+}
