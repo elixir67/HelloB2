@@ -10,6 +10,7 @@ import blackboard.test.unit.BootstrappedContextTestCase;
 import blackboard.test.unit.restassured.LearnRestAssuredTestHelper;
 
 import com.jayway.restassured.http.ContentType;
+import com.jayway.restassured.path.json.JsonPath;
 import com.jayway.restassured.response.Response;
 
 import org.junit.Test;
@@ -49,6 +50,22 @@ public class HelloRestServiceTest extends BootstrappedContextTestCase
   {
     Response response = given().contentType( ContentType.JSON ).when().get( "" );
     response.then().assertThat().statusCode( HttpStatus.OK.value() );
+    JsonPath json = new JsonPath(response.asString());
+    assertEquals(json.getString("name"), "World");
+    assertEquals(json.getString("greeting"), "Hello World");
+  }
+  
+  @Test
+  public void testGetGeetingWithName() throws Exception
+  {
+//    String urlPath = RestUtil.generateLearnRestUrl( RestConstants.REST_VERSION_V1,
+//                           "greeting?name=Dan" );
+    String urlPath = "?name=Dan";
+    Response response = given().contentType( ContentType.JSON ).when().get(urlPath);
+    response.then().assertThat().statusCode( HttpStatus.OK.value() );
+    JsonPath json = new JsonPath(response.asString());
+    assertEquals(json.getString("name"), "Dan");
+    assertEquals(json.getString("greeting"), "Hello Dan");
   }
   
 }

@@ -39,7 +39,7 @@ public class HelloTORest extends BaseTORest
   
   public String getGreeting()
   {
-    return "hello " + _name;
+    return "Hello " + _name;
   }
 
   @Override

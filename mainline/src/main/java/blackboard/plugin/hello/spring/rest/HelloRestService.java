@@ -32,14 +32,10 @@ public class HelloRestService
   @ResponseStatus( HttpStatus.OK )
   @RestSuccessCodes( status = { HttpStatus.OK } )
   @ImplementationStatus( Status.ReadyForProduction )
-//  public String greeting()
-//  {
-//    String name = "world";
-//    return "Hello " + name;
-//  }
   public HelloTORest greeting(@RequestParam( value = "name", required = false ) String name)
   {
-    //String name = "world";
+    if(name == null)
+      name = "World";
     HelloTORest r = new HelloTORest();
     r.initName(name);
     return r;
